@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Document Verification</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            width: 50%;
+            margin-bottom: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 90%;
+            border: none;
+            border-radius: 5px;
+        }
+        input[type="file"], input[type="password"] {
+            background: white;
+            color: black;
+        }
+        button {
+            background: #f44336;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #d32f2f;
+        }
+        .message {
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .fingerprint-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .fingerprint {
+            width: 100px;
+            height: 100px;
+            background: url('https://i.imgur.com/Q6RAYXy.png') no-repeat center center;
+            background-size: cover;
+            filter: grayscale(100%);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                filter: grayscale(100%);
+            }
+            50% {
+                transform: scale(1.1);
+                filter: grayscale(0%);
+            }
+            100% {
+                transform: scale(1);
+                filter: grayscale(100%);
+            }
+        }
+        .fingerprint-id {
+            background: black;
+            padding: 10px;
+            border-radius: 5px;
+            color: #4CAF50;
+            word-break: break-all;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blockchain Document Verification</h1>
+
+    <!-- Encrypt Section -->
+    <div class="container">
+        <h2>Encrypt Document</h2>
+        <form action="/encrypt" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <input type="password" name="password" placeholder="Enter password" required>
+            <button type="submit">Encrypt & Store Fingerprint</button>
+        </form>
+
+        {% if fingerprint %}
+        <div class="fingerprint-box">
+            <div class="fingerprint"></div>
+            <div class="message">Fingerprint Generated:</div>
+            <div class="fingerprint-id">{{ fingerprint }}</div>
+        </div>
+
+        {% if object_id and package_id %}
+            <div class="message">Stored on SUI Blockchain</div>
+            <div class="fingerprint-id"><strong>Object ID:</strong> {{ object_id }}</div>
+            <div class="fingerprint-id"><strong>Package ID:</strong> {{ package_id }}</div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- Decrypt Section -->
+    <div class="container">
+        <h2>Decrypt Document</h2>
+        <form action="/decrypt" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <input type="password" name="password" placeholder="Enter password" required>
+            <button type="submit">Decrypt</button>
+        </form>
+    </div>
+
+    <!-- Check Fingerprint Section -->
+    <div class="container">
+        <h2>Check Fingerprint on SUI Blockchain</h2>
+        <form action="/check_fingerprint" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <input type="text" name="fingerprint" placeholder="Enter Object ID">
+            <button type="submit">Verify Fingerprint</button>
+        </form>
+
+        {% if error %}
+            <div class="message" style="color: red;">{{ error }}</div>
+        {% elif message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>

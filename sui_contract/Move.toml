@@ -1,0 +1,10 @@
+[package]
+name = "your_project"
+version = "0.0.1"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", rev = "1d5f1cb" }
+
+[addresses]
+your_project = "0x0"
+sui = "0x2"

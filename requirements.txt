@@ -1,0 +1,5 @@
+flask
+cryptography
+boto3
+sui
+requests
